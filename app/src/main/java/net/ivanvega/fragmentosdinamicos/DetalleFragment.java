@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -155,11 +156,13 @@ public class DetalleFragment extends Fragment
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
+        Log.d("Audiolibros","Entramos en OnPrepared de Media Player");
         mediaPlayer.start();
         mediaController.setMediaPlayer(this);
         mediaController.setAnchorView(
                 getView().findViewById(R.id.fragment_detalle_layout_root));
         mediaController.setEnabled(true);
+        mediaController.setPadding(0,0,0,110);
         mediaController.show();
 
 

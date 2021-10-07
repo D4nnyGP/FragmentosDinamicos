@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,8 +47,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        TabLayout tabs = findViewById(R.id.tabs);
+        tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()){
+                    case 0:
+                        System.out.println("Todos");
+                        break;
+                    case 1:
+                        System.out.println("Nuevos");
+                        break;
+                    case 2:
+                        System.out.println("Leidos");
+                        break;
+                }
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
     }
 
@@ -103,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
                 builder.setMessage("Mensaje de Acerca De");
                 builder.setPositiveButton(android.R.string.ok, null);
                 builder.create().show();
+                break;
+            case R.id.menu_ultimo:
+                irUltimoVisitado();
                 break;
         }
         return false;
