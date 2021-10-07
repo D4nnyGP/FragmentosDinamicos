@@ -69,6 +69,14 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_gravity="right|end|bottom"
+        android:src="@drawable/done" />
+
     <FrameLayout
         android:id="@+id/contenedor_pequeno"
         android:layout_width="match_parent"
@@ -80,13 +88,5 @@
 
 
     </FrameLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|end|bottom"
-        android:layout_margin="16dp"
-        android:src="@drawable/done" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
