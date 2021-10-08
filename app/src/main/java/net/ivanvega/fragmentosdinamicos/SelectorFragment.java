@@ -103,8 +103,8 @@ public class SelectorFragment extends Fragment {
         recyclerViewLibros =
                 layout.findViewById(R.id.recyclerViewLibros);
 
-        MiAdaptadorPersonalizado miAdaptadorPersonalizado =
-        new MiAdaptadorPersonalizado(getActivity() ,
+        AdaptadorFiltro miAdaptadorPersonalizado =
+        new AdaptadorFiltro(getActivity() ,
                 Libro.ejemplosLibros()
                 )        ;
 
@@ -117,7 +117,8 @@ public class SelectorFragment extends Fragment {
                         "ELement at selected" + pos,
                         Toast.LENGTH_LONG).show();
 
-                ((MainActivity)this.contexto).mostrarDetalle(pos);
+                //((MainActivity)this.contexto).mostrarDetalle(pos);
+                ((MainActivity)this.contexto).mostrarDetalle((int)miAdaptadorPersonalizado.getItemId(pos));
             }
         );
 
@@ -163,9 +164,11 @@ public class SelectorFragment extends Fragment {
 
                                                         }
                                                     }).show();
-                                            Libro.ejemplosLibros().add(
-                                                    Libro.ejemplosLibros().get(posLibro)
-                                            );
+                                            //Libro.ejemplosLibros().add(
+                                            //        Libro.ejemplosLibros().get(posLibro)
+                                            //);
+                                            int posicion = recyclerViewLibros.getChildLayoutPosition(view);
+                                            miAdaptadorPersonalizado.insertar((Libro)miAdaptadorPersonalizado.getItem(posicion));
                                             miAdaptadorPersonalizado
                                                     .notifyItemInserted(
                                                             Libro.ejemplosLibros().size()-1);
@@ -176,7 +179,8 @@ public class SelectorFragment extends Fragment {
                                                     .setAction("SI", new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View view) {
-                                                            Libro.ejemplosLibros().remove(posLibro);
+                                                            //Libro.ejemplosLibros().remove(posLibro);
+                                                            miAdaptadorPersonalizado.borrar(posLibro);
                                                             miAdaptadorPersonalizado.notifyItemRemoved(posLibro);
                                                         }
                                                     }).show();

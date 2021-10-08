@@ -19,7 +19,7 @@ public class MiAdaptadorPersonalizado
         extends RecyclerView.Adapter<MiAdaptadorPersonalizado.ViewHolder> {
 
 
-    private final Vector<Libro> libros;
+    public Vector<Libro> libros;
     private final Context contexto;
     private View.OnClickListener onClickLister;
     private View.OnLongClickListener onLongClickItemListener;

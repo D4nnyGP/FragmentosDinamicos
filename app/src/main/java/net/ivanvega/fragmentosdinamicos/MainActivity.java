@@ -19,12 +19,14 @@ import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
 
+    private AdaptadorFiltro adaptador;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        adaptador = ((Aplicacion) getApplicationContext()).getAdaptador();
 
         if (findViewById(R.id.contenedor_pequeno) != null &&
                 getSupportFragmentManager()
@@ -48,20 +50,33 @@ public class MainActivity extends AppCompatActivity {
         });
 
         TabLayout tabs = findViewById(R.id.tabs);
+
+        tabs.addTab(tabs.newTab().setText("Todos"));
+        tabs.addTab(tabs.newTab().setText("Nuevos"));
+        tabs.addTab(tabs.newTab().setText("Leidos"));
+        tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()){
                     case 0:
                         System.out.println("Todos");
+                        adaptador.setNovedad(false);
+                        adaptador.setLeido(false);
                         break;
                     case 1:
                         System.out.println("Nuevos");
+                        adaptador.setNovedad(true);
+                        adaptador.setLeido(false);
                         break;
                     case 2:
                         System.out.println("Leidos");
+                        adaptador.setNovedad(false);
+                        adaptador.setLeido(true);
                         break;
                 }
+                adaptador.notifyDataSetChanged();
             }
 
             @Override
@@ -148,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 
 
 }
