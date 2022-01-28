@@ -37,12 +37,9 @@ public class ServicioReproduccion extends Service {
 
         //notificacion = new NotificationCompat.Builder(this);
 
-
-        return super.onStartCommand(intent, flags, startId);
+        //return START_STICKY;
+       return super.onStartCommand(intent, flags, startId);
     }
-
-
-
     @Override
     public void onDestroy() {
         Toast.makeText(this, "terminando servicio", Toast.LENGTH_SHORT).show();
