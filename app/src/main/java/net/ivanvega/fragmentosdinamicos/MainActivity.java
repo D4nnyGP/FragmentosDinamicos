@@ -1,5 +1,8 @@
 package net.ivanvega.fragmentosdinamicos;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +23,7 @@ import com.google.android.material.tabs.TabLayout;
 public class MainActivity extends AppCompatActivity {
 
     private AdaptadorFiltro adaptador;
+    Intent intent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View view) {
                irUltimoVisitado();
+
             }
         });
 
@@ -92,12 +97,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void mostrarDetalle(int id) {
         DetalleFragment detalleFragment =
                 (DetalleFragment) getSupportFragmentManager().
                         findFragmentById(R.id.detalle_fragment);
         if (detalleFragment != null) {
             detalleFragment.setInfoLibro(id);
+            stopService(intent);
         } else {
 
             detalleFragment =
@@ -112,11 +128,16 @@ public class MainActivity extends AppCompatActivity {
                     bundle
             );
 
+            intent = new Intent(this, ServicioReproduccion.class);
+            startService(intent);
+
             getSupportFragmentManager().beginTransaction().
                     setReorderingAllowed(true)
                     .replace(R.id.contenedor_pequeno, detalleFragment)
                     .addToBackStack(null)
                     .commit();
+
+
         }
         SharedPreferences pref = getSharedPreferences(
                 "com.example.audiolibros_internal", MODE_PRIVATE);

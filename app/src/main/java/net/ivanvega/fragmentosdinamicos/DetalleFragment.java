@@ -1,5 +1,6 @@
 package net.ivanvega.fragmentosdinamicos;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public class DetalleFragment extends Fragment
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String uri;
 
     public static String ARG_INDEX_LIBRO = "idLibro";
     private TextView lblTitulo;
@@ -107,6 +109,7 @@ public class DetalleFragment extends Fragment
 
           Bundle args = getArguments();
 
+
           if(args != null){
                int idLibro =
                        args.getInt(DetalleFragment.ARG_INDEX_LIBRO);
@@ -114,6 +117,7 @@ public class DetalleFragment extends Fragment
           }else{
               setInfoLibro(0, layout);
           }
+
 
 
         return layout;
@@ -125,6 +129,7 @@ public class DetalleFragment extends Fragment
         lblTitulo = layout.findViewById(R.id.titulo);
         lblAutor = layout.findViewById(R.id.autor);
         imvPortada = layout.findViewById(R.id.portada);
+        uri = libro.getUrl();
 
         lblTitulo.setText(libro.getTitulo());
         lblAutor.setText(libro.getAutor());
