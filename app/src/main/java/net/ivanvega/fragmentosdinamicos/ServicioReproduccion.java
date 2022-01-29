@@ -7,6 +7,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -51,7 +52,7 @@ public class ServicioReproduccion extends Service implements MediaPlayer.OnPrepa
         titulo = intent.getStringExtra("titulo");
         Toast.makeText(this, "uri: "+uri, Toast.LENGTH_SHORT).show();
 
-        ReceiverAlarm.createNotificationChannel(this,new Intent(this,MainActivity.class));
+        //ReceiverAlarm.createNotificationChannel(this,new Intent(this,MainActivity.class));
         mostrarNotificacion(this, null,titulo,contenido);
 
         if( mediaPlayer== null){
@@ -97,17 +98,24 @@ public class ServicioReproduccion extends Service implements MediaPlayer.OnPrepa
     private void mostrarNotificacion(Context context, Intent intent, String titulo, String contenido) {
         //createNotificationChannel(context,intent);
 
+        Intent intentAct = new Intent(this,MainActivity.class);
+        PendingIntent resultPendingIntent = PendingIntent
+                .getActivity(this, 1, intentAct, PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_baseline_book_24)
                 .setContentTitle(titulo)
                 .setContentText(contenido)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(resultPendingIntent);
 
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(context);
 
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(1001, builder.build());
+
+
 
     }
 
