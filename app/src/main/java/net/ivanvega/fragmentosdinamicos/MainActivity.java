@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
             intent = new Intent(this, ServicioReproduccion.class);
             intent.putExtra("uri", Libro.ejemplosLibros().get(id).getUrl());
+            intent.putExtra("titulo", Libro.ejemplosLibros().get(id).getTitulo());
             startService(intent);
 
             getSupportFragmentManager().beginTransaction().
@@ -175,15 +176,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void irUltimoVisitado() {
-        SharedPreferences pref = getSharedPreferences(
-                "com.example.audiolibros_internal", MODE_PRIVATE);
-        int id = pref.getInt("ultimo", -1);
-        if (id >= 0) {
-            mostrarDetalle(id);
-        } else {
-            Toast.makeText(this,"Sin última vista",Toast.LENGTH_LONG).show();
-        }
-
+        Intent intent = new Intent(this, ServicioReproduccion.class);
+        stopService(intent);
     }
 
 
