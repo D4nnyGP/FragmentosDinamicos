@@ -162,14 +162,14 @@ public class DetalleFragment extends Fragment
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         Log.d("Audiolibros","Entramos en OnPrepared de Media Player");
-        mediaPlayer.start();
+        /*mediaPlayer.start();
         mediaController.setMediaPlayer(this);
         mediaController.setAnchorView(
                 getView().findViewById(R.id.fragment_detalle_layout_root));
         mediaController.setEnabled(true);
         mediaController.setPadding(0,0,0,110);
         mediaController.show();
-
+        */
 
     }
 

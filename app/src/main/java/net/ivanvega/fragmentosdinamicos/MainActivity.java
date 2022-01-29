@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             );
 
             intent = new Intent(this, ServicioReproduccion.class);
+            intent.putExtra("uri", Libro.ejemplosLibros().get(id).getUrl());
             startService(intent);
 
             getSupportFragmentManager().beginTransaction().

@@ -5,21 +5,27 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.MediaController;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import java.io.IOException;
 import java.nio.channels.Channel;
 
-public class ServicioReproduccion extends Service {
+public class ServicioReproduccion extends Service implements MediaPlayer.OnPreparedListener,
+        MediaController.MediaPlayerControl,
+        View.OnTouchListener {
 
     MediaPlayer mediaPlayer;
-    private static int ID_NOT = 1234;
-    NotificationCompat.Builder notificacion;
+    MediaController mediaController;
 
     @Nullable
     @Override
@@ -29,21 +35,110 @@ public class ServicioReproduccion extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "iniciando servicio", Toast.LENGTH_SHORT).show();
-        mediaPlayer = MediaPlayer.create(this, Settings.System.DEFAULT_RINGTONE_URI);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        String uri="";
+        uri=intent.getStringExtra("uri");
+        Toast.makeText(this, "uri: "+uri, Toast.LENGTH_SHORT).show();
+        if( mediaPlayer== null){
+            mediaPlayer = new MediaPlayer();
+            mediaController = new MediaController(this);
+            mediaPlayer.setOnPreparedListener(this);
+            try {
+                mediaPlayer.setDataSource(this,
+                        Uri.parse(uri));
+                mediaPlayer.prepareAsync();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
 
 
-        //notificacion = new NotificationCompat.Builder(this);
 
-        //return START_STICKY;
-       return super.onStartCommand(intent, flags, startId);
+        //mediaPlayer = MediaPlayer.create(this, Settings.System.DEFAULT_RINGTONE_URI);
+        //mediaPlayer.setLooping(true);
+        //mediaPlayer.start();
+
+        return super.onStartCommand(intent, flags, startId);
     }
     @Override
     public void onDestroy() {
         Toast.makeText(this, "terminando servicio", Toast.LENGTH_SHORT).show();
         mediaPlayer.stop();
+        mediaPlayer.release();
         super.onDestroy();
     }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        mediaPlayer.start();
+        mediaController.setMediaPlayer(this);
+        mediaController.setEnabled(true);
+        mediaController.setPadding(0,0,0,110);
+        mediaController.show();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        mediaController.show();
+        return false;
+    }
+
+    @Override
+    public void start() {
+        mediaPlayer.start();
+    }
+
+
+
+    @Override
+    public void pause() {
+        mediaPlayer.pause();
+    }
+
+    @Override
+    public int getDuration() {
+        return mediaPlayer.getDuration();
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        return mediaPlayer.getCurrentPosition();
+    }
+
+    @Override
+    public void seekTo(int i) {
+        mediaPlayer.seekTo(i);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return mediaPlayer.isPlaying();
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return 0;
+    }
+
+    @Override
+    public boolean canPause() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekBackward() {
+        return false;
+    }
+
+    @Override
+    public boolean canSeekForward() {
+        return false;
+    }
+
+    @Override
+    public int getAudioSessionId() {
+        return 0;
+    }
+
+
 }
