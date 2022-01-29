@@ -7,6 +7,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.io.IOException;
 import java.nio.channels.Channel;
@@ -27,6 +29,8 @@ import java.nio.channels.Channel;
 public class ServicioReproduccion extends Service implements MediaPlayer.OnPreparedListener,
         MediaController.MediaPlayerControl,
         View.OnTouchListener {
+
+    private static final String CHANNEL_ID = "AUDIOLIBROS";
 
     MediaPlayer mediaPlayer;
     MediaController mediaController;
@@ -42,6 +46,10 @@ public class ServicioReproduccion extends Service implements MediaPlayer.OnPrepa
         String uri="";
         uri=intent.getStringExtra("uri");
         Toast.makeText(this, "uri: "+uri, Toast.LENGTH_SHORT).show();
+
+        ReceiverAlarm.createNotificationChannel(this,null);
+        mostrarNotificacion(this, null);
+
         if( mediaPlayer== null){
             mediaPlayer = new MediaPlayer();
             mediaController = new MediaController(this);
@@ -54,15 +62,24 @@ public class ServicioReproduccion extends Service implements MediaPlayer.OnPrepa
                 e.printStackTrace();
             }
 
+        }else{
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = new MediaPlayer();
+            mediaController = new MediaController(this);
+            mediaPlayer.setOnPreparedListener(this);
+            try {
+                mediaPlayer.setDataSource(this,
+                        Uri.parse(uri));
+                mediaPlayer.prepareAsync();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 
-        Intent notificationIntent = new Intent(this,MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
 
-        Notification notification = new NotificationCompat.Builder(this,
-                CHANNEL_ID).setContentTitle("Example Service ").setContentText("Reproducciondo Audio")
-                .setContentIntent(pendingIntent).build();
+
 
 
 
@@ -70,8 +87,27 @@ public class ServicioReproduccion extends Service implements MediaPlayer.OnPrepa
         //mediaPlayer.setLooping(true);
         //mediaPlayer.start();
 
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
+
+    private void mostrarNotificacion(Context context, Intent intent) {
+        //createNotificationChannel(context,intent);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("AudioLibros")
+                .setContentText("Reproduciendo Audio")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager =
+                NotificationManagerCompat.from(context);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(1001, builder.build());
+
+    }
+
+
     @Override
     public void onDestroy() {
         Toast.makeText(this, "terminando servicio", Toast.LENGTH_SHORT).show();
