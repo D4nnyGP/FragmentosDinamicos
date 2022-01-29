@@ -1,11 +1,10 @@
 package net.ivanvega.fragmentosdinamicos;
 
-import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
-public class Notificacion  extends Application{
+public class Notificacion  extends Aplicacion{
     public static final String CHANNEL_ID = "EjemploServicio";
 
     @Override
@@ -19,8 +18,8 @@ public class Notificacion  extends Application{
             NotificationChannel servicechanel = new NotificationChannel(CHANNEL_ID,"Servicio Ejecutando",
                     NotificationManager.IMPORTANCE_DEFAULT);
         }
-        ///NotificationManager manager = getSystemService(NotificationManager.class);
-        //manager.createNotificationChannel(servicechanel);
+        //NotificationManager manager = getSystemService(NotificationManager.class);
+       //manager.createNotificationChannel(servicechanel);
 
     }
 }
