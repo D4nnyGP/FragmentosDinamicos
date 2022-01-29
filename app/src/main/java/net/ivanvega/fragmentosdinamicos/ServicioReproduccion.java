@@ -44,11 +44,15 @@ public class ServicioReproduccion extends Service implements MediaPlayer.OnPrepa
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String uri="";
+        String titulo;
+        String contenido;
         uri=intent.getStringExtra("uri");
+        contenido = "Reproduciendo: "+uri;
+        titulo = intent.getStringExtra("titulo");
         Toast.makeText(this, "uri: "+uri, Toast.LENGTH_SHORT).show();
 
-        ReceiverAlarm.createNotificationChannel(this,null);
-        mostrarNotificacion(this, null);
+        ReceiverAlarm.createNotificationChannel(this,new Intent(this,MainActivity.class));
+        mostrarNotificacion(this, null,titulo,contenido);
 
         if( mediaPlayer== null){
             mediaPlayer = new MediaPlayer();
@@ -90,14 +94,14 @@ public class ServicioReproduccion extends Service implements MediaPlayer.OnPrepa
         return START_NOT_STICKY;
     }
 
-    private void mostrarNotificacion(Context context, Intent intent) {
+    private void mostrarNotificacion(Context context, Intent intent, String titulo, String contenido) {
         //createNotificationChannel(context,intent);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("AudioLibros")
-                .setContentText("Reproduciendo Audio")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setSmallIcon(R.drawable.ic_baseline_book_24)
+                .setContentTitle(titulo)
+                .setContentText(contenido)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(context);
