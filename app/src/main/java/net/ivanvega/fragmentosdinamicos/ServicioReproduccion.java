@@ -1,7 +1,11 @@
 package net.ivanvega.fragmentosdinamicos;
 
+import static net.ivanvega.fragmentosdinamicos.App.CHANNEL_ID;
+
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -51,6 +55,14 @@ public class ServicioReproduccion extends Service implements MediaPlayer.OnPrepa
             }
 
         }
+
+
+        Intent notificationIntent = new Intent(this,MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
+
+        Notification notification = new NotificationCompat.Builder(this,
+                CHANNEL_ID).setContentTitle("Example Service ").setContentText("Reproducciondo Audio")
+                .setContentIntent(pendingIntent).build();
 
 
 
