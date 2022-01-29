@@ -237,8 +237,8 @@ public class DetalleFragment extends Fragment
 
     @Override
     public void onStop() {
-        mediaPlayer.stop();
-        mediaPlayer.release();
+        //mediaPlayer.stop();
+        //mediaPlayer.release();
         super.onStop();
     }
 }

@@ -19,12 +19,12 @@ public class Notificacion  extends Aplicacion{
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void crearNotificacion(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-             servicechanel = new NotificationChannel(CHANNEL_ID,"Servicio Ejecutando",
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            servicechanel = new NotificationChannel(CHANNEL_ID, "Servicio Ejecutando",
                     NotificationManager.IMPORTANCE_DEFAULT);
-        }
-        NotificationManager manager = getSystemService(NotificationManager.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+
             manager.createNotificationChannel(servicechanel);
         }
 
